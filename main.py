@@ -1,12 +1,23 @@
-import logging
-from slack_sdk import WebClient
+from flask import Flask
 
-from config import *
+from config import SOLID_MICROSERVICE_CONFIGS, DEBUG
 
+from handler import service_handler
+from bot_events import service_bot_events
 
-from download_content import download_video, download_content
-from get_post_download_url import get_post_download_url
+HOST = SOLID_MICROSERVICE_CONFIGS["HOST"]
+PORT = SOLID_MICROSERVICE_CONFIGS["PORT"]
 
 
 def main():
-    pass
+    app = Flask(__name__)
+
+    app.register_blueprint(service_handler)
+    app.register_blueprint(service_bot_events)
+
+    app.run(debug=DEBUG, host=HOST, port=PORT)
+
+
+if __name__ == "__main__":
+    main()
+

@@ -1,19 +1,20 @@
-from flask import Flask, request
+from flask import Flask, request, Blueprint
 
 from download_content import download_content
 from get_post_download_url import get_post_download_url
 from post_message import send_message
 
-from config import DEBUG
+from config import DEBUG, MICROSERVICE_HANDLER
 
 
-HOST = "localhost"
-PORT = 5555
-
-app = Flask(__name__)
+HOST = MICROSERVICE_HANDLER["HOST"]
+PORT = MICROSERVICE_HANDLER["PORT"]
 
 
-@app.route("/handler", methods=["POST"])
+service_handler = Blueprint("handler", __name__)
+
+
+@service_handler.route("/handler", methods=["POST"])
 def handler():
     data = request.json
 
@@ -28,4 +29,6 @@ def handler():
 
 
 if __name__ == "__main__":
+    app = Flask(__name__)
+    app.register_blueprint(service_handler)
     app.run(debug=DEBUG, host=HOST, port=PORT)

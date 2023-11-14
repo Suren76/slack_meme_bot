@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from instaloader import Post, Instaloader
-from typing import TypeAlias, Literal, NamedTuple
+from typing import Literal, NamedTuple
 from exceptions import InvalidUrlException
 
 
@@ -32,7 +32,10 @@ class InstaDownloadLink(NamedTuple):
 def _get_download_url(shortcode: str) -> InstaDownloadLink:
     post_to_download = Post.from_shortcode(Instaloader().context, shortcode)
 
-    return InstaDownloadLink(post_to_download.video_url, "video") if post_to_download.is_video else InstaDownloadLink(post_to_download.url, "image")
+    _content_type: Literal["video", "image"] = "video" if post_to_download.is_video==True else "image"  # PY-44103
+    _download_url = post_to_download.video_url if _content_type == "video" else post_to_download.url
+
+    return InstaDownloadLink(_download_url, _content_type)
 
 
 def get_post_download_url(

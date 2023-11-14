@@ -9,7 +9,6 @@ Video: TypeAlias = bytes
 Image: TypeAlias = bytes
 
 
-# generic kazmakerpi
 def download_content(
         insta_download: Optional[InstaDownloadLink] = None,
         url: Optional[str] = None,
