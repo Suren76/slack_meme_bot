@@ -1,8 +1,10 @@
+from os import getenv
+
 DEBUG = True
 
-
 TOKEN = {
-
+    "bot": getenv("TOKEN_BOT"),
+    "user": getenv("TOKEN_USER")
 }
 
 channels = {
